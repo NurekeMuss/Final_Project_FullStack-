@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<style>
+    #clear{
+        background-color: red;
+    }
+</style>
+<body>
+    <header>
+        <a href="/"><h1>Cinema</h1></a> 
+        <form id="form" action="/search" method="GET">
+            <input type="text" placeholder="Search" id="search" class="search" name="query">
+        </form>
+    </header>
+ 
+    <!-- Display genres -->
+    <div id="tags">
+        <% genres.forEach(genre => { %>
+            <div class="tag" id="<%= genre.id %>">
+                <%= genre.name %>
+            </div>
+        <% }) %>
+        <div class="tag" id="clear">
+            Clear
+        </div>
+    </div>
+
+    <!-- Video -->
+    <div id="myNav" class="overlay">
+
+        <!-- Button to close the overlay navigation -->
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      
+        <!-- Overlay content -->
+        <div class="overlay-content" id="overlay-content"></div>
+        
+      </div>
+
+    <div id="movies">
+        <% movies.forEach(movie => { %>
+            <div class="movie">
+                <img src="<%= movie.poster_path ? IMG_URL + movie.poster_path : 'http://via.placeholder.com/1080x1580' %>" alt="<%= movie.title %>">
+                <div class="movie-info">
+                    <h3><%= movie.title %></h3>
+                    <span class="<%= getColor(movie.vote_average) %>"><%= movie.vote_average %></span>
+                </div>
+                <div class="overview">
+                    <h3>Overview</h3>
+                    <%= movie.overview %>
+                    <br/> 
+                    <button class="know-more" id="<%= movie.id %>">Know More</button>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+    
+    <!-- Всплышаюший сообщение -->
+    <div id="error" class="success-message">Login failed. Maybe you are not registered, try to register!</div>
+    
+    <!-- Pagination -->
+    <div class="pagination">
+        <div class="page" id="prev">Previous Page</div>
+        <div class="current" id="current"><%= currentPage %></div>
+        <div class="page" id="next">Next Page</div>
+    </div>
+
+    <script>
+        const API_KEY = 'api_key=3329c2a65cf5820d22458d06284c19ae';
+        const BASE_URL = 'https://api.themoviedb.org/3';
+        const API_URL = BASE_URL + '/discover/movie?sort_by=popularity.desc&'+API_KEY;
+        const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+        const searchURL = BASE_URL + '/search/movie?'+API_KEY;
+    document.addEventListener('DOMContentLoaded', () => {
+    const knowMoreButtons = document.querySelectorAll('.know-more');
+
+    knowMoreButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            // Check if the user is logged in
+            const token = localStorage.getItem('token');
+            if (!token) {
+                // Display error message
+                const errorMessage = document.getElementById('error');
+                errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 3000);
+                return;
+            }
+
+            // If the user is logged in, proceed with fetching the video data and displaying the overlay
+            const movieId = button.id; // Get the movie ID from the button
+            openNav(movieId);
+        });
+    });
+});
+
+// Function to show videos and dots
+function showVideos() {
+    const embeds = document.querySelectorAll('.embed');
+    const dotsContainer = document.querySelector('.dots');
+
+    // Display the first video, hide others
+    embeds.forEach((embed, idx) => {
+        if (idx === activeSlide) {
+            embed.classList.remove('hide');
+            embed.classList.add('show');
+        } else {
+            embed.classList.remove('show');
+            embed.classList.add('hide');
+        }
+    });
+
+    // Clear existing dots
+    dotsContainer.innerHTML = '';
+
+    // Add a single dot
+    const dot = document.createElement('span');
+    dot.classList.add('dot', 'active');
+    dot.innerText = '1'
+    dotsContainer.appendChild(dot);
+}
+async function openNav(movieId) {
+    try {
+        const response = await fetch(BASE_URL + '/movie/' + movieId + '/videos?' + API_KEY);
+        const videoData = await response.json();
+
+        if (videoData && videoData.results.length > 0) {
+            const embed = [];
+            const dots = [];
+
+            videoData.results.forEach((video, idx) => {
+                const { name, key, site } = video;
+
+                if (site === 'YouTube') {
+                    embed.push(`
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/${key}" title="${name}" class="embed hide" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    `);
+
+                    dots.push(`
+                        <span class="dot">${idx + 1}</span>
+                    `);
+                }
+            });
+
+            // Check if the overlay-content element exists
+            const overlayContent = document.getElementById('overlay-content');
+            if (overlayContent) {
+                // Set the innerHTML if the element exists
+                overlayContent.innerHTML = `
+                    <h1 class="no-results">Video Player</h1>
+                    <br/>
+                    ${embed.join('')}
+                    <br/>
+                    <div class="dots">${dots.join('')}</div>
+                `;
+
+                // Display the overlay
+                document.getElementById("myNav").style.width = "100%";
+                activeSlide = 0;
+                showVideos();
+            } else {
+                console.error('Error: overlay-content element not found');
+            }
+        } else {
+            // No video results found
+            console.error('No video results found');
+        }
+    } catch (error) {
+        console.error('Error fetching video data:', error);
+    }
+}
+
+// Function to close the overlay
+function closeNav() {
+    document.getElementById("myNav").style.width = "0%";
+}
+
+    // Function to highlight selected genres
+    function highlightSelectedGenres(selectedGenre) {
+        const tags = document.querySelectorAll('.tag');
+        tags.forEach(tag => {
+            // Check if the tag's id matches any selected genre
+            if (selectedGenre.includes(tag.id)) {
+                tag.classList.add('highlight'); // Add highlight class if selected
+            } else {
+                tag.classList.remove('highlight'); // Remove highlight class if not selected
+            }
+        });
+    }
+
+    // Get initial selected genres from URL query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const genreParam = urlParams.get('genre');
+    const selectedGenre = genreParam ? genreParam.split(',') : [];
+
+    // Call highlightSelectedGenres function with initial selected genres
+    highlightSelectedGenres(selectedGenre);
+
+    // Add event listener to genre tags
+    const tags = document.querySelectorAll('.tag');
+    tags.forEach(tag => {
+        tag.addEventListener('click', () => {
+            const genreId = tag.id;
+            if (genreId === 'clear') {
+                // Clear selected genres
+                selectedGenre.length = 0;
+            } else {
+                const index = selectedGenre.indexOf(genreId);
+                if (index !== -1) {
+                    selectedGenre.splice(index, 1); // Deselect the genre if already selected
+                } else {
+                    selectedGenre.push(genreId); // Select the genre if not selected
+                }
+            }
+            highlightSelectedGenres(selectedGenre); // Update the highlighted genres
+            // Redirect to /movies route with genre query parameter
+            window.location.href = `/${selectedGenre.length > 0 ? `?genre=${selectedGenre.join(',')}` : ''}`;
+        });
+    });
+
+    // Pagination functionality
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    const current = document.getElementById('current');
+
+    prev.addEventListener('click', () => {
+        const prevPage = parseInt(current.textContent) - 1;
+        if (prevPage >= 1) {
+            window.location.href = `/?page=${prevPage}`;
+        }
+    });
+
+    next.addEventListener('click', () => {
+        const nextPage = parseInt(current.textContent) + 1;
+        window.location.href = `/?page=${nextPage}`;
+    });
+    </script>
+</body>
+</html>

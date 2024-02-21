@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;700&display=swap');
+
+:root{
+    --primary-color:#22254b;
+    --secondary-color: #373b69;
+}
+
+body{
+    max-width: 1300px;
+    padding: 0 80px;
+    margin: auto;
+    background-color: var(--primary-color);
+    
+}
+.users-list {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--secondary-color);
+}
+h2{
+    font-family: 'Poppins', sans-serif;
+    color: white;
+}
+.user {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.user p {
+    font-family: 'Poppins', sans-serif;
+    margin: 5px 0;
+    color: white;
+}
+
+.user label{
+    color: white;
+}
+
+.user form {
+    margin-top: 10px;
+}
+
+.user form input[type="text"] {
+    padding: 5px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.user form .edit {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.del{
+    background-color: red;
+    color: white;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+
+
+.admin_btn a{
+    text-decoration: none;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.admin_btn button{
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.main{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.success-message {
+    display: none;
+    background-color: red;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    border-radius: 5px;
+    transform: translateX(-50%);
+    animation: fadeOut 3s ease-in-out;
+  }
