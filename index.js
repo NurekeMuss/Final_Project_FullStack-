@@ -53,6 +53,9 @@ app.get('/login', (req, res) => {
     res.render('login')
 }) 
 
+app.get('/auth/login', (req, res) => {
+    res.render('login')
+})
 app.get('/signup', (req, res) => {
     res.render('register')
 })
@@ -67,7 +70,6 @@ app.post('/auth/login', loginValidator, handleValidationErrors, checkAdminRole,U
         totalPages: data.total_pages
     });
 }) 
-
 app.get('/admin', async (req, res) => {
     try {
         // Fetch all users from the database
@@ -83,7 +85,7 @@ app.get('/admin', async (req, res) => {
         });
 
         // Render the admin.ejs template with the users data
-        res.render('admin', { users });
+        res.render('admin', { users: users }); // Ensure that the variable name matches the one used in the template
     } catch (error) {
         console.error('Error fetching users:', error);
         res.status(500).send('Failed to fetch users.');
@@ -117,7 +119,9 @@ app.post('/admin/delete-user/:userId', async (req, res) => {
 });
 
 /* get Login and password through json  */ 
-app.post('/auth/register', registerValidaation, handleValidationErrors, UserController.register)
+app.post('/auth/register', registerValidaation, handleValidationErrors, UserController.register,(req, res) => {
+    res.render('login')
+})
  
 /* Function middleware(посредник) checkAuth */
 app.get('/auth/me', checkAuth, UserController.getMe, (req, res) => {
@@ -161,6 +165,10 @@ const genres = [
     { id: 37, name: "Western" }
 ];
 
+app.get('/movies', (req, res) => {
+    // Render the movies.ejs template
+    res.render('movies');
+});
 
 app.get('/', async (req, res) => {
     try {

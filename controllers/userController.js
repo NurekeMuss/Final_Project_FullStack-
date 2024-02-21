@@ -1,52 +1,45 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt'
-
+/* import { verifyToken } from './utils/checkUtils'; */
 
 import UserModel from '../modules/user.js';
 
-
 export const register = async (req, res) => {
-    try{
-   /* Шифрование пароля  */
-     const password = req.body.password;
-     const salt = await bcrypt.genSalt(10);//Алгоритм шифрование 
-     const hash = await bcrypt.hash(password,salt)//зашифрованный пароль
-   
-   
-     const doc = new UserModel({
-       email: req.body.email,
-       fullName: req.body.fullName,
-       avatarUrl: req.body.avatarUrl,
-       passwordHash:hash,
-     })
-   
-     /* create user in db */
-     const user = await doc.save()
-   
-   /* get token  */
-   const token = jwt.sign({
-     _id:user._id,
-   }, 
-   'secret123',//ключ 
-   {
-   expiresIn:'30d', //deadline :)
-   })
-   
-   const {passwordHash, ...userData} = user._doc
-   
-     res.json({
-       ...userData,
-       token})
-      
-      res.render('login')
+  try {
+      /* Шифрование пароля  */
+      const password = req.body.password;
+      const salt = await bcrypt.genSalt(10); //Алгоритм шифрование 
+      const hash = await bcrypt.hash(password, salt); //зашифрованный пароль
 
-    }catch(err){
-     console.log(err);
-     res.status(500).json({
-       message:"cannot registration",
-     })
-    }
-   
+      const doc = new UserModel({
+          email: req.body.email,
+          fullName: req.body.fullName,
+          avatarUrl: req.body.avatarUrl,
+          passwordHash: hash,
+      });
+
+      /* create user in db */
+      const user = await doc.save();
+
+      /* get token  */
+      const token = jwt.sign({
+          _id: user._id,
+      },
+          'secret123', //ключ 
+          {
+              expiresIn: '30d', //deadline :)
+          });
+
+      const { passwordHash, ...userData } = user._doc;
+
+      // Redirect to login after successful registration
+      res.redirect('login');
+  } catch (err) {
+      console.log(err);
+      res.status(500).json({
+          message: "cannot registration",
+      });
+  }
 }
 export const login = async (req, res) => {
   try {
@@ -70,9 +63,9 @@ export const login = async (req, res) => {
       if (email === 'admin@gmail.com' && password === '12605291') {
           // If so, assign the role as admin
           user.role = 'admin';
-      } else {
-          // Otherwise, assign the role as user
-          user.role = 'user';
+         const users = await UserModel.find();
+            // Render the admin view with the list of users
+            return res.render('admin', { users });
       }
 
       // Save the updated user role
@@ -81,12 +74,11 @@ export const login = async (req, res) => {
       // Generate JWT token
       const token = jwt.sign({ _id: user._id }, 'secret123', { expiresIn: '30d' });
       console.log('Generated token:', token);
-
-      // Save the token in the local storage
       res.locals.token = token;
+      console.log("saving data",res.locals.token)
+      
+
       res.redirect('/');
-      /*  res.json({ token }); */
-    
   } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Sorry, cannot login' });
