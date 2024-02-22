@@ -165,11 +165,19 @@ const genres = [
     { id: 37, name: "Western" }
 ];
 
-app.get('/movies', (req, res) => {
+/* app.get('/movies', async (req, res) => {
     // Render the movies.ejs template
-    res.render('movies');
+    const data = await response.json();
+    res.render('movies', {
+        movies: data.results,
+        IMG_URL: IMG_URL,
+        getColor: getColor,
+        genres: genres,
+        currentPage: parseInt(page || 1),
+        totalPages: data.total_pages
+    });
 });
-
+ */
 app.get('/', async (req, res) => {
     try {
         const { page, query, genre } = req.query;
