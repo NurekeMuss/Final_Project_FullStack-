@@ -78,7 +78,7 @@ export const login = async (req, res) => {
       console.log("saving data",res.locals.token)
       
 
-      res.redirect('/');
+      res.redirect('/movies');
   } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Sorry, cannot login' });

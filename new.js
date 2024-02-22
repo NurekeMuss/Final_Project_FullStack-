@@ -28,40 +28,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     languageSelect.addEventListener('change', handleLanguageChange);
-    knowMoreButtons.forEach(button => button.addEventListener('click'));
+    knowMoreButtons.forEach(button => button.addEventListener('click', handleKnowMoreClick));
 
     fetchMovies();
 });
+
 async function fetchMovies() {
     try {
         const response = await fetch(API_URL);
         const movieData = await response.json();
         updateMovies(movieData.results);
-        attachKnowMoreEventListeners(); // Attach event listeners after updating movies
     } catch (error) {
         console.error('Error fetching movie data:', error);
     }
 }
-
-function attachKnowMoreEventListeners() {
-    const knowMoreButtons = document.querySelectorAll('.know-more');
-    knowMoreButtons.forEach(button => {
-        button.addEventListener('click', async () => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                const errorMessage = document.getElementById('error');
-                errorMessage.style.display = 'block';
-                setTimeout(() => {
-                    errorMessage.style.display = 'none';
-                }, 3000);
-                return;
-            }
-            const movieId = button.id;
-            openNav(movieId);
-        });
-    });
-}
-
 
 function updateMovies(movies) {
     const moviesContainer = document.getElementById('movies');
@@ -95,32 +75,6 @@ function createMovieElement(movie) {
 
 function getColor(vote) {
     return vote >= 8 ? 'green' : (vote >= 5 ? 'orange' : 'red');
-}
-
-// Function to show videos and dots
-function showVideos() {
-    const embeds = document.querySelectorAll('.embed');
-    const dotsContainer = document.querySelector('.dots');
-
-    // Display the first video, hide others
-    embeds.forEach((embed, idx) => {
-        if (idx === activeSlide) {
-            embed.classList.remove('hide');
-            embed.classList.add('show');
-        } else {
-            embed.classList.remove('show');
-            embed.classList.add('hide');
-        }
-    });
-
-    // Clear existing dots
-    dotsContainer.innerHTML = '';
-
-    // Add a single dot
-    const dot = document.createElement('span');
-    dot.classList.add('dot', 'active');
-    dot.innerText = '1'
-    dotsContainer.appendChild(dot);
 }
 
 async function openNav(movieId) {

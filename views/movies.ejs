@@ -21,9 +21,16 @@
             <a href="/login">Login</a>
             <a href="/signup">Signup</a>
             <button id="logout-button" class="logout">Logout</button>
+
+            <!-- Language Selection -->
+            <select id="language-select">
+                <option value="en-US"><p>English</p></option>
+                <option value="ru-RU"><p>Russian</p></option>
+                <!-- Add more language options as needed -->
+            </select>
         </div>
     </header>
- 
+    
     <!-- Display genres -->
     <div id="tags">
         <% genres.forEach(genre => { %>
@@ -38,14 +45,12 @@
 
     <!-- Video -->
     <div id="myNav" class="overlay">
-
         <!-- Button to close the overlay navigation -->
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
       
         <!-- Overlay content -->
         <div class="overlay-content" id="overlay-content"></div>
-        
-      </div>
+    </div>
 
     <div id="movies">
         <% movies.forEach(movie => { %>
@@ -65,10 +70,10 @@
         <% }) %>
     </div>
     
-    <!-- Всплышаюший сообщение -->
+    <!-- Error Messages -->
     <div id="error" class="success-message">Login failed. Maybe you are not registered, try to register!</div>
     <div id="logout" class="success-message">You logout!</div>
-    <div id="logoutError" class="success-message">You not login or registered!</div>
+    <div id="logoutError" class="success-message">You are not logged in or registered!</div>
     
     <!-- Pagination -->
     <div class="pagination">
@@ -76,6 +81,7 @@
         <div class="current" id="current"><%= currentPage %></div>
         <div class="page" id="next">Next Page</div>
     </div>
+
     <script src="/movie.js"></script>
 </body>
 </html>

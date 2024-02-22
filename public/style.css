@@ -316,3 +316,14 @@ main{
     transform: translateX(-50%);
     animation: fadeOut 3s ease-in-out;
   }
+
+select{
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;    
+}
+
+option p{
+    margin: 550px;
+}
