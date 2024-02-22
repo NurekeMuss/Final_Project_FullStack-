@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fetchMovies();
 });
+
+localStorage.setItem('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQ3YWNiZTc4M2M2M2UzODQ1NzM0MTkiLCJpYXQiOjE3MDg2MzQwNzQsImV4cCI6MTcxMTIyNjA3NH0.OyV67-qjhMTqIct6UQHCLZDe2-knNkJ_WBws8IQCtHc')
+
 async function fetchMovies() {
     try {
         const response = await fetch(API_URL);
