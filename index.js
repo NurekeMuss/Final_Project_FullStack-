@@ -130,8 +130,6 @@ app.get('/auth/me', checkAuth, UserController.getMe, (req, res) => {
 
 
 
-const IMG_URL = 'https://image.tmdb.org/t/p/w500';
-
 function getColor(vote) {
     if (vote >= 8) {
         return 'green';
@@ -177,8 +175,7 @@ const genres = [
         totalPages: data.total_pages
     });
 });
- */
-app.get('/', async (req, res) => {
+ */app.get('/', async (req, res) => {
     try {
         const { page, query, genre } = req.query;
         let url = '';
@@ -191,30 +188,24 @@ app.get('/', async (req, res) => {
         }
         const response = await fetch(url);
         const data = await response.json();
-        if (req.query.genre) {
-            res.render('movies', {
-                movies: data.results,
-                IMG_URL: IMG_URL,
-                getColor: getColor,
-                genres: genres,
-                currentPage: parseInt(page || 1),
-                totalPages: data.total_pages
-            });
-        } else {
-            res.render('movies', {
-                movies: data.results,
-                IMG_URL: IMG_URL,
-                getColor: getColor,
-                genres: genres,
-                currentPage: parseInt(page || 1),
-                totalPages: data.total_pages
-            });
-        }
+        
+
+        const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+        // Assuming data.results contains the movie data
+        res.render('movies', {
+            movies: data.results, // Pass movie data to the EJS template
+            IMG_URL: IMG_URL,
+            getColor: getColor,
+            genres: genres,
+            currentPage: parseInt(page || 1),
+            totalPages: data.total_pages
+        });
     } catch (error) {
         console.error('Error fetching movies:', error);
         res.render('error', { message: 'An error occurred while fetching data from the API.' });
     }
 });
+
 
 app.get('/search', (req, res) => {
     const { query } = req.query;

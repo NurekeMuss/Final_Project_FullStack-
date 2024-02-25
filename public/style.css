@@ -5,8 +5,8 @@
 }
 
 :root{
-    --primary-color:#22254b;
-    --secondary-color: #373b69;
+    --primary-color:#040D12;
+    --secondary-color: #EF4040;
 }
 
 body{
@@ -29,7 +29,7 @@ header{
     display:flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--secondary-color);
+    background-color: var(--primary-color);
 }
 
 .search{
@@ -96,7 +96,6 @@ main{
 }
 
 .movie-info span{
-    background-color: var(--primary-color);
     padding: 0.25rem 0.5rem;
     border-radius: 3px;
     font-weight: bold;
@@ -326,4 +325,89 @@ select{
 
 option p{
     margin: 550px;
+}
+
+/* CAROUSEL */
+.slideshow-container {
+    max-width: 1000px;
+    position: relative;
+    margin: auto;
+}
+
+.slideshow-container img {
+    width: 150px;
+    float: left; 
+    margin-right: 10px;
+}
+
+.mySlides {
+    display: none;
+    text-align: left;
+    overflow: hidden;
+    background-color: grey;
+}
+
+.text {
+    color: #f2f2f2;
+    font-size: 15px;
+    padding: 8px 12px;
+    width: calc(100% - 160px);
+    float: left;
+    
+}
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 3px;
+    user-select: none;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.next {
+    right: 0;
+    border-radius: 3px;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.numbertext {
+    color: #f2f2f2;
+    font-size: 12px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+}
+
+.dot {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+    background-color: #717171;
+}
+
+.fade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+
+@keyframes fade {
+    from {opacity: 0.4}
+    to {opacity: 1}
 }

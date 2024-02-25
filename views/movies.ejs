@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movies</title>
+
     <link rel="stylesheet" href="/style.css">
 </head>
 <style>
@@ -30,6 +31,28 @@
             </select>
         </div>
     </header>
+    <hr>
+    <div class="container-fluid mt-5">
+        <center><h2 style="color: white;">Popular</h2></center>
+        <!-- Custom Slideshow Carousel -->
+        <div class="slideshow-container">
+            <!-- Slides -->
+            <% movies.forEach((movie, index) => { %>
+            <div class="mySlides fade <% if (index === 0) { %>active<% } %>">
+                <img src="<%= movie.poster_path ? IMG_URL + movie.poster_path : 'http://via.placeholder.com/1080x1580' %>" alt="<%= movie.title %>">
+                <div class="text">
+                    <h3><%= movie.title %></h3>
+                    <p>Description: <%= movie.overview %></p>
+                    <p>Release Date: <%= movie.release_date %></p>
+                </div>
+            </div>
+            <% }); %>
+            <!-- Previous and Next buttons -->
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        </div>
+    </div>
+
     
     <!-- Display genres -->
     <div id="tags">
@@ -42,7 +65,7 @@
             Clear
         </div>
     </div>
-
+<hr>
     <!-- Video -->
     <div id="myNav" class="overlay">
         <!-- Button to close the overlay navigation -->
@@ -83,5 +106,7 @@
     </div>
 
     <script src="/movie.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </body>
 </html>
