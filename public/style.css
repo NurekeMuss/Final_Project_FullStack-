@@ -411,3 +411,17 @@ option p{
     from {opacity: 0.4}
     to {opacity: 1}
 }
+
+footer{
+    background: #111;
+    padding: 15px 23px;
+    color: #fff;
+    text-align: center;
+}
+footer span a{
+    color: #FFCF96;
+    text-decoration: none;
+}
+footer span a:hover{
+    text-decoration: underline;
+}

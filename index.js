@@ -24,8 +24,6 @@ app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
 
-
-
 mongoose.connect(
     'mongodb+srv://admin:admin@cluster0.2re14nq.mongodb.net/finalProject'
 ).then(() => {
